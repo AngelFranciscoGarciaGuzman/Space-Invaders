@@ -78,6 +78,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9bf12ba3ef2de8343b3c0bc998dac613, type: 3}
       insertIndex: -1
       addedObject: {fileID: -459378208798472179}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9bf12ba3ef2de8343b3c0bc998dac613, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3249436861207284078}
   m_SourcePrefab: {fileID: 100100000, guid: 9bf12ba3ef2de8343b3c0bc998dac613, type: 3}
 --- !u!1 &1966812637717327086 stripped
 GameObject:
@@ -132,3 +135,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.16499998, y: 0.11999999, z: 0.014999999}
   m_Center: {x: 0.029999997, y: 0.052499995, z: 0}
+--- !u!114 &3249436861207284078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966812637717327086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9222d0de3fff1b4db2d376d8183a281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 2593651917328456655, guid: 60e7da0d36b1237429ba1ed08eda2023, type: 3}
+  bulletSpeed: 10
+  bulletCount: 10
+  fireRate: 1

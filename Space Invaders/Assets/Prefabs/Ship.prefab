@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  horizontalLimit: 12
+  horizontalLimit: 10
   depthLimit: 20
 --- !u!65 &672781161966108324
 BoxCollider:
