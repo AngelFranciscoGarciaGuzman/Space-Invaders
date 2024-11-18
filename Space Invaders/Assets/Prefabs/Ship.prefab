@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 33af9f6508cf2184aa21c14ed92bfbc3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 33af9f6508cf2184aa21c14ed92bfbc3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -112,7 +112,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 16
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &-8388677279503334284
 MonoBehaviour:
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a5b1b04201ff440a658409d3970b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 15
   horizontalLimit: 10
   depthLimit: 20
 --- !u!65 &672781161966108324
