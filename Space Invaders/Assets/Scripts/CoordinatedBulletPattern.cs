@@ -7,73 +7,67 @@ public class CoordinatedBulletPattern : MonoBehaviour
     private float frequency;
     private float amplitude;
     private float spawnDelay;
-    private float timeOffset; // Desfase en el tiempo para el movimiento de serpiente
-    private float timeSinceStart; // Tiempo que ha pasado desde el inicio
+    private float timeOffset;
+    private int patternStage;  // 0 = serpiente, 1 = circular, 2 = espiral
 
-    private bool isSinePattern = true; // Para saber si estamos en el patrón de serpiente
-    private float changePatternTime = 10f; // Tiempo después del cual cambia el patrón
-    private float patternChangeTimer = 0f; // Temporizador para el cambio de patrón
-
-    public void Initialize(Vector3 moveDirection, float moveSpeed, float waveFrequency, float waveAmplitude, float delay)
+    // Inicialización
+    public void Initialize(Vector3 moveDirection, float moveSpeed, float waveFrequency, float waveAmplitude, float delay, int stage)
     {
         direction = moveDirection.normalized;
         speed = moveSpeed;
         frequency = waveFrequency;
         amplitude = waveAmplitude;
         spawnDelay = delay;
-        timeOffset = Time.time; // Guardar el tiempo inicial para desfase
+        timeOffset = Time.time;  // Guardamos el tiempo inicial para los cálculos
+        patternStage = stage; // Guardamos el patrón actual
     }
 
     void Update()
     {
-        timeSinceStart = Time.time - timeOffset; // Tiempo desde que comenzó la bala
-
-        // Mueve la bala en la dirección recta
+        // Movimiento de la bala: avanzar en la dirección y agregar movimiento en el patrón correspondiente
         Vector3 forwardMovement = direction * speed * Time.deltaTime;
 
-        // Actualiza el temporizador para controlar cuándo cambiar el patrón
-        patternChangeTimer += Time.deltaTime;
-
-        // Comprobar si han pasado 10 segundos y cambiar el patrón
-        if (patternChangeTimer >= changePatternTime && isSinePattern)
+        switch (patternStage)
         {
-            isSinePattern = false;
-            patternChangeTimer = 0f; // Reiniciar el temporizador para el nuevo patrón
-            timeOffset = Time.time; // Reiniciar el tiempo para la nueva fórmula
-        }
+            case 0:
+                // Patrón serpenteante (senoidal)
+                amplitude = Mathf.Sin(Time.time * frequency);  // La amplitud varía con el tiempo
+                float wave = Mathf.Sin((Time.time - timeOffset) * frequency) * amplitude;
+                Vector3 snakeMovement = transform.right * wave;
+                transform.position += forwardMovement + snakeMovement;
+                break;
 
-        // Patrón de onda senoidal (serpiente)
-        if (isSinePattern)
-        {
-            // Cambiar la amplitud en función del tiempo usando Sin
-            amplitude = Mathf.Sin(Time.time * frequency); // Esto hará que la amplitud varíe de lado a lado
+            case 1:
+                // Patrón circular
+                float radius = 1f;
+                float angle = (Time.time - timeOffset) * frequency;
+                float x = Mathf.Cos(angle) * radius;
+                float z = Mathf.Sin(angle) * radius;
+                Vector3 circularMovement = new Vector3(x, 0, z);
+                transform.position += forwardMovement + circularMovement;
+                break;
 
-            // Aplica la onda con la nueva amplitud
-            float wave = Mathf.Sin((Time.time - timeOffset) * frequency) * amplitude;
-            Vector3 snakeMovement = transform.right * wave;
+            case 2:
+                // Patrón espiral
+                float spiralRadius = 0.2f + Mathf.Sin(Time.time - timeOffset) * 0.5f; // Radio que crece con el tiempo
+                float spiralAngle = (Time.time - timeOffset) * frequency; // Ángulo creciente
 
-            // Combina el movimiento hacia adelante y el movimiento de ondulación
-            transform.position += forwardMovement + snakeMovement;
-        }
-        else
-        {
-            // Patrón circular después de 10 segundos
-            float radius = 1f; // Radio del círculo
-            float angle = (patternChangeTimer * frequency); // Ángulo que avanza con el tiempo
+                // Cálculo del movimiento en espiral
+                float xSpiral = Mathf.Cos(spiralAngle) * spiralRadius;
+                float zSpiral = Mathf.Sin(spiralAngle) * spiralRadius;
 
-            // Movimiento en un patrón circular
-            float x = Mathf.Cos(angle) * radius; // Movimiento en el eje X
-            float z = Mathf.Sin(angle) * radius; // Movimiento en el eje Z
-
-            // Aplica el movimiento circular
-            Vector3 circularMovement = new Vector3(x, 0, z);
-            transform.position += forwardMovement + circularMovement;
+                Vector3 spiralMovement = new Vector3(xSpiral, 0, zSpiral);
+                transform.position += forwardMovement + spiralMovement;
+                break;
         }
     }
 
-    // Método para cambiar el patrón a circular desde afuera
-    public void SetCircularPattern()
+    // Este método se llama cuando la bala se destruye
+    private void OnDestroy()
     {
-        isSinePattern = false; // Cambiar el patrón a circular
+        if (FindObjectOfType<EnemyShooting>() != null)
+        {
+            FindObjectOfType<EnemyShooting>().RemoveBulletFromList(gameObject);
+        }
     }
 }
